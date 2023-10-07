@@ -5,6 +5,7 @@ import { sha512 } from "js-sha512";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
 import ZodErrorHandler from "../handler/ZodErrorHandler";
+import sendOTP from "./otpSender";
 
 const prisma = new PrismaClient();
 
@@ -40,6 +41,8 @@ export async function POST(req: Request, res: Response) {
 	);
 
 	res.cookie("token", token, { httpOnly: true });
+
+	await sendOTP({ userId: user.id, email });
 
 	return ResponseHandler.success({
 		req,

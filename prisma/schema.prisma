@@ -21,6 +21,10 @@ model User {
   appointmentsAsAppointer     Appointment[]   @relation("AppointmentsAppointer")
   appointmentsAsAppointee     Appointment[]   @relation("AppointmentsAppointee")
   freeSlots                   Slots[]         @relation("Slots")
+  otp                         Int?
+  otpExpiry                   DateTime?
+  otpAttempts                 Int?            @default(0)
+  otpVerified                 Boolean         @default(false)
 }
 
 model Appointment {

@@ -20,6 +20,7 @@ async function auth(req: Request, res: Response, next: NextFunction) {
 		const user = await prisma.user.findUnique({
 			where: {
 				id: userId,
+				otpVerified: true,
 			},
 		});
 		if (!user) throw Error("Invalid user");
