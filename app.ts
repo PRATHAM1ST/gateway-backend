@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import ResponseHandler from "./handler/ResponseHandler";
 import authRoute from "./routes/auth";
 import sloteRoute from "./routes/slot";
+import usersRoute from "./routes/users";
 
 const express = require("express");
 const cors = require("cors");
@@ -28,5 +29,6 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRoute);
 app.use("/slot", sloteRoute);
+app.use("/users", usersRoute);
 
 export default app;

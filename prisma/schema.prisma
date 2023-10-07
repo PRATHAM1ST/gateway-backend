@@ -25,6 +25,8 @@ model User {
   otpExpiry                   DateTime?
   otpAttempts                 Int?            @default(0)
   otpVerified                 Boolean         @default(false)
+  memberOfTeams               TeamMembership[]
+  adminOfTeams                Team[]          @relation("TeamAdmin")
 }
 
 model Appointment {
@@ -42,6 +44,8 @@ model Appointment {
   appointeeId     String    @db.ObjectId
   occupiedSlot    Slots     @relation("AppointmentSlot", fields: [occupiedSlotId], references: [id])
   occupiedSlotId  String    @db.ObjectId @unique
+  team            Team?      @relation("TeamAppointments", fields: [teamId], references: [id])
+  teamId          String?    @db.ObjectId
 }
 
 
@@ -55,4 +59,26 @@ model Slots {
   user            User          @relation("Slots", fields: [userId], references: [id])
   userId          String        @db.ObjectId 
   appointment     Appointment?  @relation("AppointmentSlot")
+}
+
+model Team{
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  name            String
+  description     String
+  members         TeamMembership[]
+  admin           User          @relation("TeamAdmin", fields: [adminId], references: [id])
+  adminId         String        @db.ObjectId 
+  appointments    Appointment[] @relation("TeamAppointments")
+}
+
+model TeamMembership {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  user            User        @relation(fields: [userId], references: [id])
+  userId          String      @db.ObjectId
+  team            Team        @relation(fields: [teamId], references: [id])
+  teamId          String      @db.ObjectId
+
+  @@unique([userId, teamId])
 }
