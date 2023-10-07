@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../prisma/generated/client";
 import ResponseHandler from "../handler/ResponseHandler";
 import { z } from "zod";
 import ZodErrorHandler from "../handler/ZodErrorHandler";

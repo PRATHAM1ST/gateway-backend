@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../prisma/generated/client";
 import ResponseHandler from "../handler/ResponseHandler";
 import { sha512 } from "js-sha512";
 import { z } from "zod";
