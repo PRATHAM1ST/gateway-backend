@@ -13,7 +13,7 @@ export default class ResponseHandler {
 		message: string;
 	}) {
 		return res.status(200).json({
-			status: true,
+			success: true,
 			data: data,
 			message: message,
 		});
@@ -31,7 +31,7 @@ export default class ResponseHandler {
 		errors?: Array<object>;
 	}) {
 		return res.status(500).json({
-			status: false,
+			success: false,
 			message: message,
 			errors: errors,
 		});
