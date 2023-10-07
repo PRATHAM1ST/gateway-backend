@@ -4,6 +4,7 @@ import ResponseHandler from "../handler/ResponseHandler";
 import { z } from "zod";
 import ZodErrorHandler from "../handler/ZodErrorHandler";
 import { sha512 } from "js-sha512";
+import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -31,6 +32,16 @@ export async function POST(req: Request, res: Response) {
 	});
 
 	if (!user) throw new Error("User not created");
+
+	const token = jwt.sign(
+		{ userId: user.id },
+		String(process.env.JWT_SECRET),
+		{
+			expiresIn: "24h",
+		}
+	);
+
+	res.cookie("token", token, { httpOnly: true });
 
 	return ResponseHandler.success({
 		req,

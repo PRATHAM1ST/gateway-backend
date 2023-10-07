@@ -3,6 +3,7 @@ import { PrismaClient } from "../prisma/generated/client";
 import ResponseHandler from "../handler/ResponseHandler";
 import { sha512 } from "js-sha512";
 import { z } from "zod";
+import jwt from "jsonwebtoken";
 import ZodErrorHandler from "../handler/ZodErrorHandler";
 
 const prisma = new PrismaClient();
@@ -29,6 +30,16 @@ export async function POST(req: Request, res: Response) {
 	});
 
 	if (!user) throw new Error("User not found");
+
+	const token = jwt.sign(
+		{ userId: user.id },
+		String(process.env.JWT_SECRET),
+		{
+			expiresIn: "24h",
+		}
+	);
+
+	res.cookie("token", token, { httpOnly: true });
 
 	return ResponseHandler.success({
 		req,
