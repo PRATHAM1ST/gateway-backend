@@ -19,16 +19,13 @@ async function auth(req: Request, res: Response, next: NextFunction) {
 		// check if user exists and is active
 		const user = await prisma.user.findUnique({
 			where: {
-				id: userId,
-				otpVerified: true,
+				id: userId
 			},
 		});
 		if (!user) throw Error("Invalid user");
 
-		const reqWithUserId = req as Request & { userId: string };
-		reqWithUserId.userId = userId;
-
-		next(reqWithUserId);
+		req.body.userId = userId;
+		next();
         
 	} catch (err: any) {
 		// eslint-disable-line

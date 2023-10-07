@@ -6,18 +6,18 @@ import ZodErrorHandler from "../handler/ZodErrorHandler";
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request & { userId: string }, res: Response) {
+export async function POST(req: Request, res: Response) {
     const { otp } = req.body;
 
     const schema = z.object({
-        otp: z.number().min(10, "OTP must be 10 characters long"),
+        otp: z.number().min(6, "OTP must be 6 characters long"),
     });
 
     ZodErrorHandler({ otp }, schema);
 
     const user = await prisma.user.findUnique({
         where: {
-            id: req.userId,
+            id: req.body.userId,
         },
     });
 
@@ -31,7 +31,7 @@ export async function POST(req: Request & { userId: string }, res: Response) {
 
     await prisma.user.update({
         where: {
-            id: req.userId,
+            id: req.body.userId,
         },
         data: {
             otp: null,
@@ -49,4 +49,5 @@ export async function POST(req: Request & { userId: string }, res: Response) {
     });
 }
 
+export default { POST };
 

@@ -27,6 +27,7 @@ export async function POST(req: Request, res: Response) {
 		where: {
 			email: email,
 			password: hashedPassword,
+			otpVerified: true,
 		},
 	});
 

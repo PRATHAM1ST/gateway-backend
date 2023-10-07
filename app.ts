@@ -8,9 +8,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const morgan = require("morgan");
-
+var cookieParser = require('cookie-parser')
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 
 app.use(morgan("dev"));

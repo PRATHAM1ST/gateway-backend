@@ -1,14 +1,5 @@
 import nodemailer from "nodemailer";
-import otpGenerator from "otp-generator";
 import { PrismaClient } from "../prisma/generated/client";
-
-const OTP_LENGTH = 10;
-const OTP_CONFIG = {
-	upperCaseAlphabets: true,
-	specialChars: false,
-};
-
-const OTP = otpGenerator.generate(OTP_LENGTH, OTP_CONFIG);
 
 let mailTransporter = nodemailer.createTransport({
 	service: "gmail",
@@ -27,12 +18,15 @@ export default async function sendOTP({
 	userId: string;
 	email: string;
 }) {
-	prisma.user.update({
+
+    const OTP = Math.floor(100000 + Math.random() * 900000);
+
+	await prisma.user.update({
 		where: {
 			id: userId,
 		},
 		data: {
-			otp: Number(OTP),
+			otp: OTP,
 			otpExpiry: new Date(new Date().getTime() + 600000),
 			otpAttempts: {
 				increment: 1,
