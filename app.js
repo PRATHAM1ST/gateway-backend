@@ -1,13 +1,10 @@
-import { Request, Response } from "express";
-import ResponseHandler from "./handler/ResponseHandler";
-
 const express = require("express");
 const cors = require("cors");
 const app = express();
 
 app.use(cors());
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (req, res) => {
 	ResponseHandler.success({
 		req,
 		res,
@@ -16,4 +13,7 @@ app.get("/", (req: Request, res: Response) => {
 	});
 });
 
+app.listen(4000, () => {
+	console.log("Example app listening on port 4000!");
+});
 export default app;
