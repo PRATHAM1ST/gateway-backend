@@ -20,6 +20,7 @@ model User {
   updatedAt                   DateTime        @updatedAt
   appointmentsAsAppointer     Appointment[]   @relation("AppointmentsAppointer")
   appointmentsAsAppointee     Appointment[]   @relation("AppointmentsAppointee")
+  freeSlots                   Slots[]         @relation("Slots")
 }
 
 model Appointment {
@@ -34,5 +35,20 @@ model Appointment {
   appointer       User      @relation("AppointmentsAppointer", fields: [appointerId], references: [id])
   appointerId     String    @db.ObjectId 
   appointee       User      @relation("AppointmentsAppointee", fields: [appointeeId], references: [id])
-  appointeeId     String    @db.ObjectId 
+  appointeeId     String    @db.ObjectId
+  occupiedSlot    Slots     @relation("AppointmentSlot", fields: [occupiedSlotId], references: [id])
+  occupiedSlotId  String    @db.ObjectId @unique
+}
+
+
+model Slots {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  startDateTime   DateTime    
+  endDateTime     DateTime    
+  duration        DateTime    
+  user            User          @relation("Slots", fields: [userId], references: [id])
+  userId          String        @db.ObjectId 
+  appointment     Appointment?  @relation("AppointmentSlot")
 }
