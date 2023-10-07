@@ -6,29 +6,58 @@ import ZodErrorHandler from "../handler/ZodErrorHandler";
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request & { userId: string }, res: Response) {
-	const { startDateTime, endDateTime } = req.body;
+export async function POST(req: Request, res: Response) {
+	const { dates } = req.body;
+
+	console.log(req.body, 'req.body');
 
 	const schema = z.object({
-		startDateTime: z.string(),
-		endDateTime: z.string(),
+		dates: z.array(
+			z.object({
+				startDateTime: z.string(),
+				endDateTime: z.string(),
+			})
+		),
 	});
 
-	ZodErrorHandler({ startDateTime, endDateTime }, schema);
+	ZodErrorHandler({ dates }, schema);
 
-	let durationMinutes = String(
-		(new Date(endDateTime).getTime() - new Date(startDateTime).getTime()) /
-			1000 /
-			60
+	const durationArray = dates.map(
+		(date: { startDateTime: string; endDateTime: string }) => {
+			const startDateTime = new Date(date.startDateTime);
+			const endDateTime = new Date(date.endDateTime);
+
+			const duration = endDateTime.getTime() - startDateTime.getTime();
+
+			return new Date(duration);
+		}
 	);
 
-	const freeSlot = await prisma.slots.create({
-		data: {
-			startDateTime: startDateTime,
-			endDateTime: endDateTime,
-			duration: durationMinutes,
-			userId: req.userId,
-		},
+	const totalData: {
+		startDateTime: Date;
+		endDateTime: Date;
+		duration: Date;
+		userId: string;
+	}[] = [];
+
+	for (let i = 0; i < durationArray.length; i++) {
+		const startDateTime = new Date(dates[i].startDateTime);
+		const endDateTime = new Date(dates[i].endDateTime);
+
+		const duration = durationArray[i];
+
+		const data = {
+			startDateTime,
+			endDateTime,
+			duration,
+			userId: req.body.userId,
+		};
+
+		totalData.push(data);
+	}
+
+	const freeSlot = await prisma.slots.createMany({
+		data: totalData,
 	});
 
 	if (!freeSlot) throw Error("Free Slot not created");
@@ -40,3 +69,6 @@ export async function POST(req: Request & { userId: string }, res: Response) {
 		message: "Free Slot Created",
 	});
 }
+
+
+export default { POST };

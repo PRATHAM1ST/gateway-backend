@@ -6,7 +6,7 @@ import ZodErrorHandler from "../handler/ZodErrorHandler";
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request & { userId: string }, res: Response) {
+export async function POST(req: Request, res: Response) {
 	const { startDateTime, endDateTime, slotId, title, details } = req.body;
 
 	const schema = z.object({
@@ -33,7 +33,7 @@ export async function POST(req: Request & { userId: string }, res: Response) {
 
 	if (!slot) throw Error("Slot not found");
 
-	let durationMinutes = String(
+	let durationMinutes = new Date(
 		(new Date(endDateTime).getTime() - new Date(startDateTime).getTime()) /
 			1000 /
 			60
@@ -43,10 +43,10 @@ export async function POST(req: Request & { userId: string }, res: Response) {
 		data: {
 			title: title,
 			details: details,
-			startDateTime: startDateTime,
-			endDateTime: endDateTime,
+			startDateTime: new Date(startDateTime),
+			endDateTime: new Date(endDateTime),
 			duration: durationMinutes,
-			appointerId: req.userId,
+			appointerId: req.body.userId,
 			appointeeId: slot.userId,
 			occupiedSlotId: slotId,
 		},
@@ -61,3 +61,5 @@ export async function POST(req: Request & { userId: string }, res: Response) {
 		message: "Appointment Created",
 	});
 }
+
+export default { POST };

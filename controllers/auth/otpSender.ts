@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { PrismaClient } from "../prisma/generated/client";
+import { PrismaClient } from "../../prisma/generated/client";
 
 let mailTransporter = nodemailer.createTransport({
 	service: "gmail",
@@ -31,6 +31,7 @@ export default async function sendOTP({
 			otpAttempts: {
 				increment: 1,
 			},
+			otpVerified: false,
 		},
 	});
 
