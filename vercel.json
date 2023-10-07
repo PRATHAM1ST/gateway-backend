@@ -1,5 +1,5 @@
 {
-	"version": 2,
+	"version": 1,
 	"buildCommand": "npx prisma db push && npx prisma generate && npm start",
 	"installCommand": "npm install",
 	"builds": [
