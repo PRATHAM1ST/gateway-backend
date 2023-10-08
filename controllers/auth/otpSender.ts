@@ -4,8 +4,8 @@ import { PrismaClient } from "../../prisma/generated/client";
 let mailTransporter = nodemailer.createTransport({
 	service: "gmail",
 	auth: {
-		user: "schedular46@gmail.com",
-		pass: "yrwz vmuf xqzd wldg",
+		user: process.env.NODEMAILER_EMAIL,
+		pass: process.env.NODEMAILER_PASSWORD,
 	},
 });
 
