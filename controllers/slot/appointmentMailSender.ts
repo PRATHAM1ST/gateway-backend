@@ -23,9 +23,11 @@ export default async function sendAppointmentMail({
 	timeTo: string;
 	appointmentId: string;
 }) {
-
+    timeFrom = new Date(timeFrom).toISOString()
+    timeTo = new Date(timeTo).toISOString()
 	const startDate = timeFrom.split("T")[0].split("-").join("") + "T" + timeFrom.split("T")[1].split(".")[0].split(":").join("") + "Z";
 	const endDate = timeTo.split("T")[0].split("-").join("") + "T" + timeTo.split("T")[1].split(".")[0].split(":").join("") + "Z";
+    
 
     console.log('startDate: ', startDate);
     console.log('endDate: ', endDate);
