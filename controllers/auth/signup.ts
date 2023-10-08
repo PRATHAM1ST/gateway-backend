@@ -10,7 +10,9 @@ import sendOTP from "./otpSender";
 const prisma = new PrismaClient();
 
 export async function POST(req: Request, res: Response) {
-	const { email, password, name } = req.body;
+	const { email, password, name, username } = req.body;
+
+	console.log('email: ', username);
 
 	const schema = z.object({
 		email: z.string().email("Invalid email").max(255, "Email too long"),
@@ -18,9 +20,10 @@ export async function POST(req: Request, res: Response) {
 			.string()
 			.min(8, "Password must be at least 8 characters long"),
 		name: z.string().max(50, "Name too long"),
+		username: z.string().max(50, "Username too long"),
 	});
 
-	ZodErrorHandler({ email, password, name }, schema);
+	ZodErrorHandler({ email, password, name, username }, schema);
 
 	const hashedPassword = sha512(password);
 
@@ -29,6 +32,7 @@ export async function POST(req: Request, res: Response) {
 			email,
 			password: hashedPassword,
 			name,
+			username
 		},
 	});
 
@@ -54,7 +58,7 @@ export async function POST(req: Request, res: Response) {
 		req,
 		res,
 		data: user,
-		message: "User Created",
+		message: "User Created and OTP sent",
 	});
 }
 
