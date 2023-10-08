@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "../prisma/generated/client";
-import ResponseHandler from "../handler/ResponseHandler";
+import { PrismaClient } from "../../prisma/generated/client";
+import ResponseHandler from "../../handler/ResponseHandler";
 import { z } from "zod";
-import ZodErrorHandler from "../handler/ZodErrorHandler";
+import ZodErrorHandler from "../../handler/ZodErrorHandler";
 
 const prisma = new PrismaClient();
 

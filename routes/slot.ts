@@ -1,8 +1,8 @@
 import express from "express";
 import ErrorHandler from "../handler/ErrorHandler";
 import auth from "../middleware/authMiddleware";
-import createFreeSlotController from "../controllers/createFreeSlot";
-import createAppointmentController from "../controllers/createAppointment";
+import createFreeSlotController from "../controllers/slot/createFreeSlot";
+import createAppointmentController from "../controllers/slot/createAppointment";
 
 const router = express.Router();
 
