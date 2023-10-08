@@ -8,7 +8,11 @@ const prisma = new PrismaClient();
 async function auth(req: Request, res: Response, next: NextFunction) {
 	try {
 		const token = req.cookies.token;
-		if (!token) throw Error("No token, authorization denied");
+		if (!token) {
+			res.clearCookie("token");
+			res.status(401);
+			throw Error("No token, authorization denied");
+		}
 
 		const decodedToken = jwt.verify(
 			token,
@@ -16,13 +20,18 @@ async function auth(req: Request, res: Response, next: NextFunction) {
 		) as { userId: string };
 		const userId = decodedToken.userId;
 
-		// check if user exists and is active
+		// check if user exists in db
 		const user = await prisma.user.findUnique({
 			where: {
 				id: userId
 			},
 		});
-		if (!user) throw Error("Invalid user");
+
+		if (!user){
+			res.clearCookie("token");
+			res.status(404);
+			throw Error("User does not exist");
+		}
 
 		req.body.userId = userId;
 		next();

@@ -30,7 +30,7 @@ export default class ResponseHandler {
 		message: string;
 		errors?: Array<object>;
 	}) {
-		return res.status(500).json({
+		return res.json({
 			success: false,
 			message: message,
 			errors: errors,

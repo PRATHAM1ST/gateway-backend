@@ -60,8 +60,10 @@ export async function POST(req: Request, res: Response) {
 		data: totalData,
 	});
 
-	if (!freeSlot) throw Error("Free Slot not created");
-
+	if (!freeSlot) {
+		res.status(422);
+		throw Error("Free Slot not created");
+	}
 	return ResponseHandler.success({
 		req,
 		res,

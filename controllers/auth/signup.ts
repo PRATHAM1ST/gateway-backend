@@ -32,7 +32,11 @@ export async function POST(req: Request, res: Response) {
 		},
 	});
 
-	if (!user) throw new Error("User not created");
+	if (!user){
+		res.clearCookie("token");
+		res.status(404);
+		throw new Error("User not created");
+	}
 
 	const token = jwt.sign(
 		{ userId: user.id },
