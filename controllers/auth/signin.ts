@@ -23,6 +23,8 @@ export async function POST(req: Request, res: Response) {
 
 	const hashedPassword = sha512(password);
 
+	console.log('');
+
 	const user = await prisma.user.findUnique({
 		where: {
 			email: email,
@@ -52,7 +54,10 @@ export async function POST(req: Request, res: Response) {
 	return ResponseHandler.success({
 		req,
 		res,
-		data: user,
+		data: {
+			user,
+			cookie: token,
+		},
 		message: "User Found",
 	});
 }

@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 async function auth(req: Request, res: Response, next: NextFunction) {
 	try {
-		const token = req.cookies.token;
+		const token = req.headers.authorization;
 		if (!token) {
 			res.clearCookie("token");
 			res.status(401);

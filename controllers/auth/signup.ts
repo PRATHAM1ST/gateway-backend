@@ -57,7 +57,10 @@ export async function POST(req: Request, res: Response) {
 	return ResponseHandler.success({
 		req,
 		res,
-		data: user,
+		data: {
+			user,
+			cookie: token
+		},
 		message: "User Created and OTP sent",
 	});
 }
