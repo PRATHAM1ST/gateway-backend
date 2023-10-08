@@ -6,7 +6,7 @@ import createAppointmentController from "../controllers/slot/createAppointment";
 
 const router = express.Router();
 
-router.post("/create-free-solt", auth, ErrorHandler(createFreeSlotController.POST));
+router.post("/create-free-slot", auth, ErrorHandler(createFreeSlotController.POST));
 router.post("/create-appointment", auth, ErrorHandler(createAppointmentController.POST));
 
 export default router;
