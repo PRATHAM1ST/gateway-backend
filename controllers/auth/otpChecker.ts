@@ -10,7 +10,7 @@ export async function POST(req: Request, res: Response) {
     const { otp } = req.body;
 
     const schema = z.object({
-        otp: z.number().min(6, "OTP must be 6 characters long"),
+        otp: z.string().min(6, "OTP must be 6 characters long"),
     });
 
     ZodErrorHandler({ otp }, schema);
@@ -23,7 +23,7 @@ export async function POST(req: Request, res: Response) {
 
     if (!user) throw new Error("User not found");
 
-    if (user.otp  !== otp) throw new Error("OTP does not match");
+    if (user.otp != otp) throw new Error("OTP does not match");
 
     if (!user.otpExpiry) throw new Error("OTP expiry not found");
 

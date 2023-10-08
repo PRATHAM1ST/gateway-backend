@@ -29,7 +29,6 @@ export async function POST(req: Request, res: Response) {
 		where: {
 			email: email,
 			password: hashedPassword,
-			otpVerified: true,
 		},
 	});
 
@@ -46,6 +45,18 @@ export async function POST(req: Request, res: Response) {
 			expiresIn: "24h",
 		}
 	);
+
+	if (!user.otpVerified) {
+		return ResponseHandler.success({
+			req,
+			res,
+			data: {
+				otpVerified: false,
+				cookie: token,
+			},
+			message: "otp not found",
+		});
+	}
 
 	res.cookie("token", token, { httpOnly: true });
 
