@@ -63,9 +63,11 @@ export async function POST(req: Request, res: Response) {
 
 	if (!appointment) throw Error("Appointment not created");
 
+	console.log('appointment: ', slot.startDateTime);
+
 	// send mail to user / guest
 	await sendAppointmentMail({
-		email: req.body.email,
+		email: req.body.userEmail,
 		title: title,
 		details: details,
 		timeFrom: String(slot.startDateTime),

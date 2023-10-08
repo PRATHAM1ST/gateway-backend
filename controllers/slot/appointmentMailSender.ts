@@ -8,17 +8,6 @@ let mailTransporter = nodemailer.createTransport({
 	},
 });
 
-// Format the dates in the required format (YYYYMMDDTHHMMSSZ)
-var formatDate = function (date: Date) {
-    var year = date.getFullYear();
-    var month = String(date.getMonth() + 1).padStart(2, "0");
-    var day = String(date.getDate()).padStart(2, "0");
-    var hours = String(date.getHours()).padStart(2, "0");
-    var minutes = String(date.getMinutes()).padStart(2, "0");
-    var seconds = "00";
-    return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
-};
-
 export default async function sendAppointmentMail({
 	email,
 	title,
@@ -35,24 +24,19 @@ export default async function sendAppointmentMail({
 	appointmentId: string;
 }) {
 
-	// Calculate the start date and time (for example, 2 days from now)
-	var startDate = new Date(timeFrom);
-	startDate.setDate(startDate.getDate() + 2); // Add 2 days
-	startDate.setHours(10); // Set the hour (0-23)
-	startDate.setMinutes(0); // Set the minutes
+	const startDate = timeFrom.split("T")[0].split("-").join("") + "T" + timeFrom.split("T")[1].split(".")[0].split(":").join("") + "Z";
+	const endDate = timeTo.split("T")[0].split("-").join("") + "T" + timeTo.split("T")[1].split(".")[0].split(":").join("") + "Z";
 
-	// Calculate the end date and time (for example, 2.5 hours after the start time)
-	var endDate = new Date(timeTo);
-	endDate.setHours(startDate.getHours() + 2);
-	endDate.setMinutes(startDate.getMinutes() + 30);
+    console.log('startDate: ', startDate);
+    console.log('endDate: ', endDate);
 
 	// Create the dynamic URL with the calculated dates
-	var googleCalendarURL =
+	const googleCalendarURL =
 		"https://calendar.google.com/calendar/r/eventedit?" +
 		"text=" +
 		encodeURIComponent(title) +
 		"&dates=" +
-		encodeURIComponent(formatDate(startDate) + "/" + formatDate(endDate)) +
+		encodeURIComponent(startDate + "/" + endDate) +
 		"&details=" +
 		encodeURIComponent(details) +
 		"&location=" +

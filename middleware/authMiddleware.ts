@@ -34,6 +34,7 @@ async function auth(req: Request, res: Response, next: NextFunction) {
 		}
 
 		req.body.userId = userId;
+		req.body.userEmail = user.email;
 		next();
         
 	} catch (err: any) {
